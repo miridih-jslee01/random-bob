@@ -1,5 +1,5 @@
 ---
-
+import {Main} from "./Main.tsx"
 ---
 
 <html lang="en">
@@ -11,6 +11,16 @@
 		<title>Astro</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+    <Main client:only />
 	</body>
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </html>
