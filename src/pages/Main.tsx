@@ -1,5 +1,7 @@
-import { useRef } from "react";
-import styled, { keyframes } from "styled-components";
+import { useState } from "react";
+import "./Main.css";
+import "./index.css";
+import { RandLang } from "./RandLang";
 
 const 식당들 = [
   "CU",
@@ -56,47 +58,43 @@ const 식당들 = [
 ];
 
 export const Main = () => {
-  const 식당들ref = useRef<HTMLDivElement>(null);
-  //useEffect(() => {
-  //  setTimeout(() => {
-  //    if (!식당들ref.current) {
-  //      return;
-  //    }
-  //
-  //    식당들ref.current.style.animationPlayState = 'paused'
-  //  }, 2000);
-  //}, []);
+  const [spinning, setSpinning] = useState(false);
+
+  const handleSpin = () => {
+    setSpinning(true);
+    setTimeout(() => {
+      clearInterval(1);
+      setSpinning(false);
+    }, 1000 + Math.random() * 10);
+  };
+
+  // 가장 긴 식당 이름의 길이 찾기
+  const maxLength = Math.max(...식당들.map((name) => name.length));
+
+  // 각 글자 위치별로 배열 만들기
+  const lists = [];
+  for (let i = 0; i < maxLength; i++) {
+    lists[i] = 식당들.map((name) => name[i] || " "); // 해당 위치에 글자가 없으면 공백
+  }
+
+  // // 결과 확인
+  // console.log("가장 긴 식당 이름 길이:", maxLength);
+  // lists.forEach((list, index) => {
+  //   console.log(`list${index + 1}:`, list);
+  // });
 
   return (
-    <div style={{ height: '16px', overflow: 'hidden' }}>
-      <Styled식당들 ref={식당들ref} style={{ display: 'flex', flexDirection: 'column' }}>
-        {식당들.map((식당) => <span key={식당}>{식당}</span>)}
-      </Styled식당들>
-    </div>
-  )
+    <>
+      <div className="slot-machine">
+        <div className="character-container">
+          {lists.map((list, index) => (
+            <RandLang key={index} list={list} spinning={spinning} />
+          ))}
+        </div>
+        <button onClick={handleSpin} disabled={spinning}>
+          {spinning ? "돌아가는 중..." : "슬롯 돌리기"}
+        </button>
+      </div>
+    </>
+  );
 };
-
-const slotMachine = keyframes`
-  0% {
-    transform: none;
-  }
-  100% {
-    transform: translateY(-100%);
-  }
-`
-
-const Styled식당들 = styled.div`
-  animation: ${slotMachine} 2s linear infinite both;
-`;
-
-
-/**
- * 애니메이션 디테일
- *
- * 멈출때가 되었을때 감속.
- * 목표했던 식당에서 정확히 멈추기.
- *  intersectionObserver를 이용하여, 목표 식당보다 x번째 앞에 있는 식당을 관측했을 경우, 그때 ref의 style 속성을 업데이트하여 감속.
- *  framer-motion 이용하여 멈출때 spring 애니메이션 하여 튕겨오르기 구현.
- *
- * 버튼 눌러서 돌아가기 시작할때, 천천히 가속하기.
- * */
