@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 export const RandLang = ({
   list,
   spinning,
+  result,
 }: {
   list: string[];
   spinning: boolean;
+  result: number;
 }) => {
   const [LangIndex, setLangIndex] = useState(0);
 
@@ -24,19 +26,12 @@ export const RandLang = ({
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        setLangIndex(result);
         intervalRef.current = null;
       }
     };
   }, [spinning]);
 
-  //   const handleIndex = () => {
-  //     if (spinning) {
-  //       setTimeout(() => {
-  //         clearInterval(1);
-  //         setLangIndex(Math.floor(Math.random() * 51) + 64);
-  //       }, 1000 + Math.random() * 1000);
-  //     }
-  //   };
   return (
     <div
       className={`character ${spinning ? "spin" : ""}`}

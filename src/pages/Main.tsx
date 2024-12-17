@@ -60,8 +60,12 @@ const 식당들 = [
 export const Main = () => {
   const [spinning, setSpinning] = useState(false);
 
+  const [result, setResult] = useState<number>(0);
+
   const handleSpin = () => {
     setSpinning(true);
+    setResult(Math.floor(Math.random() * 식당들.length));
+    console.log(식당들[result]);
     setTimeout(() => {
       clearInterval(1);
       setSpinning(false);
@@ -77,18 +81,17 @@ export const Main = () => {
     lists[i] = 식당들.map((name) => name[i] || " "); // 해당 위치에 글자가 없으면 공백
   }
 
-  // // 결과 확인
-  // console.log("가장 긴 식당 이름 길이:", maxLength);
-  // lists.forEach((list, index) => {
-  //   console.log(`list${index + 1}:`, list);
-  // });
-
   return (
     <>
       <div className="slot-machine">
         <div className="character-container">
           {lists.map((list, index) => (
-            <RandLang key={index} list={list} spinning={spinning} />
+            <RandLang
+              key={index}
+              list={list}
+              spinning={spinning}
+              result={result}
+            />
           ))}
         </div>
         <button onClick={handleSpin} disabled={spinning}>
