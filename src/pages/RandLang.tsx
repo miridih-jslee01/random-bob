@@ -16,7 +16,7 @@ export const RandLang = ({
     if (spinning) {
       intervalRef.current = setInterval(() => {
         setLangIndex((prev) => (prev + 1) % 12);
-      }, 50);
+      }, 10);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -39,6 +39,7 @@ export const RandLang = ({
         fontSize: "48px",
         margin: "20px",
         fontVariantNumeric: "tabular-nums",
+        width: "50px",
       }}
     >
       {list[LangIndex]}
